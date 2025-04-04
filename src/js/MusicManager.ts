@@ -1,7 +1,7 @@
 import { Howl } from 'howler';
 
 const bgm = new Howl({
-    src: ['../src/assets/bgm.mp3'],
+    src: [import.meta.env.BASE_URL + 'assets/bgm.mp3'],
     loop: true,
     volume: 0.5,
 });

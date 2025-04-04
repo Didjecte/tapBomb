@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "strict": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true // Ensures consistent file name casing
+  },
+  "include": [
+    "src/**/*.ts",
+    "vite-env.d.ts"  // Make sure this file is included
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

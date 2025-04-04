@@ -25,15 +25,14 @@ export class Bomb {
         this.explosionType = ExplosionType.cross;
         this.gameManager = gameManager;
         this.boomSound = new Howl({
-            src: ['../src/assets/boom.mp3'],
+            src: [import.meta.env.BASE_URL + 'assets/boom.mp3'],
             volume: 1.4,
         });
-
+        this.sprite = Sprite.from('bomb1');
     };
 
     spawn(app : Application) : void {
         const startRotation = -Math.PI/4;
-        this.sprite = Sprite.from('bomb1');
         this.sprite.anchor.set(0.5);
         this.sprite.scale.set(0.4);
 

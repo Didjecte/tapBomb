@@ -70,31 +70,30 @@ async function preload()
 {
     // Create an array of asset data to load.
     const assets = [
-        { alias: 'background', src: 'https://pixijs.com/assets/tutorials/fish-pond/pond_background.jpg' },
-        { alias: 'bomb1', src: '../src/assets/bomb1.png' },
-        { alias: 'bomb2', src: '../src/assets/bomb2.png' },
-        { alias: 'bomb3', src: '../src/assets/bomb3.png' },
-        { alias: 'bomb4', src: '../src/assets/bomb4.png' },
-        { alias: 'heart0', src: '../src/assets/heart0.png' },
-        { alias: 'heart1', src: '../src/assets/heart1.png' },
-        { alias: 'heart2', src: '../src/assets/heart2.png' },
-        { alias: 'heart3', src: '../src/assets/heart3.png' },
-        { alias: 'heart4', src: '../src/assets/heart4.png' },
-        { alias: 'heart5', src: '../src/assets/heart5.png' },
-        { alias: 'heart6', src: '../src/assets/heart6.png' },
-        { alias: 'heart7', src: '../src/assets/heart7.png' },
-        { alias: 'heart8', src: '../src/assets/heart8.png' },
-        { alias: 'heart9', src: '../src/assets/heart9.png' },
-        { alias: 'explosionCross', src: '../src/assets/explosionCross.png' },
-        { alias: 'cursor', src: '../src/assets/crosshair1.png' },
+        // { alias: 'background', src: 'https://pixijs.com/assets/tutorials/fish-pond/pond_background.jpg' },
+        { alias: 'bomb1', src: import.meta.env.BASE_URL + '/assets/bomb1.png' },
+        { alias: 'bomb2', src: import.meta.env.BASE_URL + '/assets/bomb2.png' },
+        { alias: 'bomb3', src: import.meta.env.BASE_URL + '/assets/bomb3.png' },
+        { alias: 'bomb4', src: import.meta.env.BASE_URL + '/assets/bomb4.png' },
+        { alias: 'heart0', src: import.meta.env.BASE_URL + '/assets/heart0.png' },
+        { alias: 'heart1', src: import.meta.env.BASE_URL + '/assets/heart1.png' },
+        { alias: 'heart2', src: import.meta.env.BASE_URL + '/assets/heart2.png' },
+        { alias: 'heart3', src: import.meta.env.BASE_URL + '/assets/heart3.png' },
+        { alias: 'heart4', src: import.meta.env.BASE_URL + '/assets/heart4.png' },
+        { alias: 'heart5', src: import.meta.env.BASE_URL + '/assets/heart5.png' },
+        { alias: 'heart6', src: import.meta.env.BASE_URL + '/assets/heart6.png' },
+        { alias: 'heart7', src: import.meta.env.BASE_URL + '/assets/heart7.png' },
+        { alias: 'heart8', src: import.meta.env.BASE_URL + '/assets/heart8.png' },
+        { alias: 'heart9', src: import.meta.env.BASE_URL + '/assets/heart9.png' },
+        { alias: 'cursor', src: import.meta.env.BASE_URL + '/assets/crosshair1.png' },
     ];
 
     // Load the assets defined above.
     await Assets.load(assets);
 
     Assets.addBundle('fonts', [
-        { alias: 'DirtyWar', src: '../src/assets/DirtyWar.otf' },
-        { alias: 'FastHand', src: '../src/assets/FastHand.otf' }
+        { alias: 'DirtyWar', src: import.meta.env.BASE_URL + '/assets/DirtyWar.otf' },
+        { alias: 'FastHand', src: import.meta.env.BASE_URL + '/assets/FastHand.otf' }
     ]);
 
     // Load the font bundle

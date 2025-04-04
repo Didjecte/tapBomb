@@ -29,11 +29,3 @@ Thumbs.db        # Windows thumbnail cache
 
 # Public assets (if you are storing them outside the public directory)
 public/assets/
-
-# Optional - Ignore build files (if using Webpack, Vite, etc.)
-*.js
-*.map
-
-# Optional - Ignore TypeScript compiled files if using TypeScript
-*.ts
-*.d.ts
