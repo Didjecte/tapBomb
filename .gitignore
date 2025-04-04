@@ -41,6 +41,3 @@ debug.log
 # Temporary files
 *.swp             # vim swap files
 *.swo             # vim swap files
-
-# Optional - if you're using TypeScript and want to ignore built JS files
-*.js
