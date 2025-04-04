@@ -1,4 +1,5 @@
 {
+  "homepage": "https://dijecte.github.io/tapBomb",
   "dependencies": {
     "gsap": "^3.12.7",
     "howler": "^2.2.4",
@@ -6,13 +7,16 @@
     "pixi.js": "^8.9.1"
   },
   "devDependencies": {
+    "gh-pages": "^6.3.0",
     "vite": "^6.2.5"
   },
   "name": "bombtap",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "vite build",
+    "deploy": "gh-pages -d dist"
   },
   "keywords": [],
   "author": "",
