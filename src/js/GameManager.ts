@@ -153,6 +153,7 @@ export class GameManager {
         this.paused = false;
         this.gameOver = false;
         this.musicManager.startBGM();
+        this.musicManager.changePlaybackRate(1);
 
         this.bombSpawner?.bombContainer.removeChildren();
 
