@@ -86,7 +86,11 @@ export class Bomb {
         )
 
 
-        this.sprite.on("pointerdown", () =>  this.clicked());
+        this.sprite.on("pointerdown", () =>  {
+            if (!this.gameManager.gameOver) {
+                this.clicked()
+            }
+        });
     }
 
     clicked() {
@@ -160,7 +164,6 @@ export class Bomb {
                 time: 10,
                 ease: 'power2.out', // Animation easing
                 onComplete: () => {
-                    console.log('destroy')
                     filterStage.filters = []
                     gsap.killTweensOf(shockwaveFilter);
                     shockwaveFilter.destroy()

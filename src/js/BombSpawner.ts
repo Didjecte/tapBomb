@@ -5,7 +5,7 @@ import { GameManager } from './GameManager';
 
 export class BombSpawner {
     app: Application;
-    spawnInterval: number;
+    spawnRate: number;
     spawnDelta: number; //randomness of interval
     spawnMin: number; //min interval
     bombContainer: Container;
@@ -13,7 +13,7 @@ export class BombSpawner {
 
     constructor(app: Application, gameManager: GameManager) {
         this.app = app;
-        this.spawnInterval = 1500; //1.5s
+        this.spawnRate = gameManager.spawnRate;
         this.spawnDelta = 2
         this.spawnMin = 200
         this.bombContainer = new Container();
@@ -21,27 +21,33 @@ export class BombSpawner {
         app.stage.addChild(this.bombContainer);
     }
 
-    startSpawning() {
+    startSpawning(): void {
         this.spawnBomb();
         
-        this.updateSpawnInterval();
+        this.updateSpawnRate();
     }
 
-    spawnBomb() {
+    spawnBomb(): void {
         const bomb = new Bomb(this.gameManager);
         bomb.spawn(this.app);
         this.bombContainer.addChild(bomb.sprite);
     }
 
-    updateSpawnInterval() {
-        const nextSpawn = Math.max(this.spawnMin, this.spawnInterval + this.spawnDelta * this.spawnInterval * (Math.random() - 0.5))
-        
-        // Schedule next bomb spawn with the updated interval
+    getSpawnRate(): number {
+        return this.spawnRate
+    }
+
+    setSpawnRate(rate: number): void {
+        this.spawnRate = rate
+    }
+
+    updateSpawnRate() {
+        const nextSpawn = Math.max(this.spawnMin, this.spawnRate + this.spawnDelta * this.spawnRate * (Math.random() - 0.5))
         setTimeout(() => {
             if (!this.gameManager.paused) {
                 this.spawnBomb();
             }
-            this.updateSpawnInterval(); // Continue adjusting the spawn interval over time
+            this.updateSpawnRate(); // Continue adjusting the spawn interval over time
         }, nextSpawn);
     }
 

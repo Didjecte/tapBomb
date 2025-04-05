@@ -108,7 +108,7 @@ export class PauseScreen {
 
         window.addEventListener("keydown", (event) => this.handlePauseToggle(event));
         document.addEventListener('visibilitychange', () => {
-            if (document.hidden && !this.isPaused) {
+            if (document.hidden && !this.isPaused && !this.gameManager.gameOver) {
                 this.togglePause();
             }
         });
@@ -125,7 +125,9 @@ export class PauseScreen {
     // Handle the toggle of the pause state with key press
     handlePauseToggle(event: KeyboardEvent) {
         if (event.key === "p" || event.key === "P" || event.key === 'Escape') {
-            this.togglePause();
+            if (!this.gameManager.gameOver) {
+                this.togglePause();
+            }
         }
     }
 
@@ -157,6 +159,5 @@ export class PauseScreen {
                 }
             )
         }
-        this.app.stage.sortChildren(); // Sort the children to make sure the overlay is on top
     }
 }

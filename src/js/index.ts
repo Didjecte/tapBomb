@@ -2,7 +2,7 @@ import { Application, Assets, Sprite, Graphics, Polygon } from 'pixi.js';
 import { BombSpawner } from './BombSpawner';
 import { GameUI } from './GameUI';
 import { setupCustomCursor } from './cursor';
-import { startBGM } from './MusicManager';
+import { MusicManager } from './MusicManager';
 import { GameManager } from './GameManager';
 import { addBackground } from './addBackground';
 import { Stats } from 'pixi-stats';
@@ -19,15 +19,14 @@ const height = 720;
     await setup();
     await preload();
 
-    startBGM();
     addBackground(app);
 
-    const gameManager = new GameManager(app)
+    const musicManager = new MusicManager();
+    const gameManager = new GameManager(app, musicManager)
     const bombSpawner = new BombSpawner(app, gameManager);
-    const gameUI = new GameUI(app);
+    const gameUI = new GameUI(app, gameManager);
     gameManager.setBombSpawner(bombSpawner)
     gameManager.setGameUI(gameUI)
-    bombSpawner.startSpawning();
 
     const pauseScreen = new PauseScreen(app, gameManager);
     
