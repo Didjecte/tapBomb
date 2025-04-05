@@ -1,6 +1,7 @@
 import { Ticker, Application } from 'pixi.js';
 import { GameUI } from './GameUI';
 import { BombSpawner } from './BombSpawner';
+import { resumeBGM, pauseBGM } from './MusicManager';
 import gsap from 'gsap';
 
 export class GameManager {
@@ -80,8 +81,10 @@ export class GameManager {
         this.paused = !this.paused
         if (this.paused) {
             this.tl.pause()
+            pauseBGM()
         } else {
             this.tl.play()
+            resumeBGM()
         }
     }
 

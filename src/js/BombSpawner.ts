@@ -38,7 +38,9 @@ export class BombSpawner {
         
         // Schedule next bomb spawn with the updated interval
         setTimeout(() => {
-            this.spawnBomb();
+            if (!this.gameManager.paused) {
+                this.spawnBomb();
+            }
             this.updateSpawnInterval(); // Continue adjusting the spawn interval over time
         }, nextSpawn);
     }
