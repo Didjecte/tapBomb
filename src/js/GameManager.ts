@@ -33,7 +33,7 @@ export class GameManager {
             this.gameUI?.start()
             const gameOverSound = new Howl({
                 src: [import.meta.env.BASE_URL + 'assets/start.mp3'],
-                volume: 1,
+                volume: 0.6,
             });
             gameOverSound.play();
             setTimeout(() => {

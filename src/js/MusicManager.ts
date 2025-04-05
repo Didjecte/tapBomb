@@ -15,7 +15,6 @@ export class MusicManager {
             loop: true,
             volume: this.volume,
         })
-        // this.startBGM()
     }
     
     // startBGM(): number {
@@ -59,40 +58,41 @@ export class MusicManager {
     }
 
     // pauseBGM(): void {
-    //     this.paused = true
-    //     this.bgm.fade(this.volume, 0, this.fadeDuration, this.soundId);
-    //     setTimeout(() => {
-    //         if (this.paused) this.bgm.pause(this.soundId);
-    //     }, this.fadeDuration);
+    //     this.paused = true;
+    //     if (this.soundId !== null && this.bgm.playing(this.soundId) && !this.isFading) {
+    //         this.isFading = true
+    //         this.bgm.fade(this.volume, 0, this.fadeDuration, this.soundId);
+    //         setTimeout(() => {
+    //             if (this.paused) {
+    //                 this.bgm.pause(this.soundId!);
+    //             }
+    //             this.isFading = false
+    //         }, this.fadeDuration);
+    //     }
     // }
 
     pauseBGM(): void {
-        this.paused = true;
-        if (this.soundId !== null && this.bgm.playing(this.soundId) && !this.isFading) {
-            this.isFading = true
-            this.bgm.fade(this.volume, 0, this.fadeDuration, this.soundId);
-            setTimeout(() => {
-                if (this.paused) {
-                    this.bgm.pause(this.soundId!);
-                }
-                this.isFading = false
-            }, this.fadeDuration);
-        }
+        this.paused = true
+        this.bgm.fade(this.volume, 0, this.fadeDuration, this.soundId!);
+        setTimeout(() => {
+            if (this.paused) this.bgm.pause(this.soundId!);
+        }, this.fadeDuration);
     }
+
 
     resumeBGM(): void {
         this.paused = false;
-        if (this.soundId !== null && !this.bgm.playing(this.soundId) && !this.isFading) {
-            console.log(this.isFading)
-            this.isFading = true
+        if (this.soundId !== null) {
+            // console.log(this.isFading)
+            // this.isFading = true
             this.bgm.play(this.soundId);
-            console.log('playing')
+            // console.log('playing')
             this.bgm.fade(this.bgm.volume(), this.volume, this.fadeDuration, this.soundId);
             
-            setTimeout(() => {
-                this.isFading = false;
-                console.log('finsihed')
-            }, this.fadeDuration);
+            // setTimeout(() => {
+            //     this.isFading = false;
+            //     console.log('finsihed')
+            // }, this.fadeDuration);
         }
     }
 
@@ -104,9 +104,9 @@ export class MusicManager {
     }
 
     // stopBGM(): void {
-    //     this.bgm.fade(this.volume, 0, this.fadeDuration, this.soundId);
+    //     this.bgm.fade(this.volume, 0, this.fadeDuration, this.soundId!);
     //     setTimeout(() => {
-    //         this.bgm.stop(this.soundId);
+    //         this.bgm.stop(this.soundId!);
     //     }, this.fadeDuration);
     // }
 
