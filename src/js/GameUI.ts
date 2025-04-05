@@ -1,4 +1,4 @@
-import { Application, Text, TextStyle, FillGradient, Sprite, Texture, Container } from 'pixi.js';
+import { Application, Text, TextStyle, FillGradient, Sprite, Texture, Container, Graphics } from 'pixi.js';
 import { DropShadowFilter } from 'pixi-filters';
 import { GameManager } from './GameManager';
 import gsap from 'gsap';

@@ -65,6 +65,7 @@ export class GameManager {
                 this.bombSpawner?.setSpawnRate(spawnRate)
             }
         });
+        
     }
 
     setBombSpawner(bombSpawner: BombSpawner) {
@@ -146,7 +147,7 @@ export class GameManager {
     }
 
     restartGame() {
-        gsap.globalTimeline.clear();
+        // gsap.globalTimeline.clear(); //buggy for restart UI
         this.tl.clear();
         this.tl.pause();
         this.tl.play();
@@ -156,6 +157,7 @@ export class GameManager {
         this.musicManager.changePlaybackRate(1);
 
         this.bombSpawner?.bombContainer.removeChildren();
+        this.bombSpawner!.bombs = [];
 
         this.updateScore(0);
         this.elapsedTime = 0;

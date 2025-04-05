@@ -93,8 +93,8 @@ export class PauseScreen {
         });
 
         this.restartButton.on('pointerdown', () => {
-            this.gameManager.restartGame();
             this.togglePause();
+            this.gameManager.restartGame();
         });
 
         this.pauseOverlay.addChild(this.resumeButton);

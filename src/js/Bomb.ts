@@ -1,45 +1,45 @@
-import { Application, Sprite, Graphics, FillGradient } from 'pixi.js';
+import { Application, Sprite, Graphics, FillGradient, Rectangle } from 'pixi.js';
 import { GameManager } from './GameManager';
 import gsap from 'gsap';
 import { Howl } from 'howler';
 import { ShockwaveFilter } from 'pixi-filters';
-
+import { BombSpawner } from './BombSpawner';
 
 enum ExplosionType {
-    cross = 1,
-    plus = 2,
+    none = 1,
+    round = 2,
     row = 3,
-    collumn
+    collumn = 4
 }
 
 export class Bomb {
+    id: number;
     hp: number;
-    explosionType: ExplosionType;
     score: number;
     sprite: Sprite;
-    gameManager: GameManager;
+    boomType: ExplosionType;
+    boomGraphics: Graphics;
     boomSound: Howl;
+    bombspawner: BombSpawner;
+    gameManager: GameManager;
     app: Application | null;
-    tl: gsap.core.Timeline;
 
-    constructor(gameManager: GameManager) {
-        this.hp = 1;
-        this.score = 1;
-        this.explosionType = ExplosionType.cross;
+    constructor(gameManager: GameManager, bombSpawner: BombSpawner, id: number, hp: number, score: number, sprite: Sprite, boomType: ExplosionType, boomGraphics: Graphics, boomSound: Howl) {
+        this.id = id;
+        this.hp = hp;
+        this.score = score;
+        this.sprite = sprite;
+        this.boomType = boomType;
+        this.boomGraphics = boomGraphics;
+        this.boomSound = boomSound;
+        this.bombspawner = bombSpawner;
         this.gameManager = gameManager;
         this.app = null;
-        this.boomSound = new Howl({
-            src: [import.meta.env.BASE_URL + 'assets/boom.mp3'],
-            volume: 1.4,
-        });
-        this.sprite = Sprite.from('bomb1');
-        this.tl = gsap.timeline()
     };
 
     spawn(app : Application) : void {
         const startRotation = -Math.PI/4;
         this.sprite.anchor.set(0.5);
-        this.sprite.scale.set(0.4);
 
         //random spawn point along y
         this.sprite.x = this.sprite.width / 2 + (app.screen.width - this.sprite.width) * Math.random();
@@ -85,7 +85,6 @@ export class Bomb {
             })
         )
 
-
         this.sprite.on("pointerdown", () =>  {
             if (!this.gameManager.gameOver) {
                 this.clicked()
@@ -93,39 +92,51 @@ export class Bomb {
         });
     }
 
-    clicked() {
-        this.gameManager.togglePause
-        this.gameManager.addScore(1);
+    clicked(): void {
+        this.gameManager.addScore(this.score);
         this.destroyBomb();
     }
 
-    touchedBottom() {
+    touchedBottom(): void {
         this.gameManager.removeLives();
         this.destroyBomb();
     }
 
-    destroyBomb() {
-        //explosion
-        const graphics = new Graphics()
-        const fill = new FillGradient({
-            type: 'radial',
-            center: { x: 0.5, y: 0.5 },
-            innerRadius: 0,
-            outerCenter: { x: 0.5, y: 0.5 },
-            outerRadius: 0.5,
-            colorStops: [
-                { offset: 0, color: '#ffee00' },
-                { offset: 1, color: '#de7e00' },
-            ],
-        });
+    destroyBomb(): ExplosionType {
+        const idx = this.bombspawner.bombs.findIndex(bomb => bomb.id === this.id)
+        if (idx !== -1) {
+            this.bombspawner.bombs.splice(idx, 1);  // Remove the bomb at the found index
+        } else {
+            'no bombs'
+        }
+        const boomType = this.boomType
+        const x = this.sprite.x
+        const y = this.sprite.y
+        setTimeout(() => {
+            this.bombspawner.checkExplosion(boomType, x, y);
+        }, 10)
+        // //explosion
+        // const graphics = new Graphics()
+        // const fill = new FillGradient({
+        //     type: 'radial',
+        //     center: { x: 0.5, y: 0.5 },
+        //     innerRadius: 0,
+        //     outerCenter: { x: 0.5, y: 0.5 },
+        //     outerRadius: 0.5,
+        //     colorStops: [
+        //         { offset: 0, color: '#ffee00' },
+        //         { offset: 1, color: '#de7e00' },
+        //     ],
+        // });
         
-        graphics.star(0, 0, 4, 200, 10, 2*Math.PI*1/4).fill(fill);
-        this.sprite.parent.addChild(graphics);
-        graphics.position.set(this.sprite.x, this.sprite.y);
-        graphics.scale.set(0)
+        // graphics.star(0, 0, 4, 200, 10, 2*Math.PI*1/4).fill(fill);
+        this.sprite.parent.addChild(this.boomGraphics);
+        this.boomGraphics.position.set(this.sprite.x, this.sprite.y);
+        this.boomGraphics.scale.set(0)
+        this.boomGraphics.hitArea = new Rectangle(0, 0, 0, 0);
         
         this.gameManager.addAnim(
-            gsap.to(graphics.scale, {
+            gsap.to(this.boomGraphics.scale, {
                 duration: 0.2,
                 x:0.8,
                 y:0.8,
@@ -134,14 +145,14 @@ export class Bomb {
         )
         
         this.gameManager.addAnim(
-            gsap.to(graphics, {
+            gsap.to(this.boomGraphics, {
                 duration: 0.4,
                 alpha: 0,
                 ease: 'power4.in',
                 onComplete: () => {
-                    gsap.killTweensOf(graphics);
-                    graphics.parent.removeChild(graphics)
-                    graphics.destroy({
+                    gsap.killTweensOf(this.boomGraphics);
+                    this.boomGraphics.parent.removeChild(this.boomGraphics)
+                    this.boomGraphics.destroy({
                         children: true
                     });
                 },
@@ -154,10 +165,10 @@ export class Bomb {
             wavelength: 100,
             radius: 300,
             speed: 40
-        })
-        const filterStage = this.sprite.parent.parent
-        filterStage.filters = [shockwaveFilter]
-        shockwaveFilter.center = [this.sprite.x, this.sprite.y]
+        });
+        const filterStage = this.sprite.parent.parent;
+        filterStage.filters = [shockwaveFilter];
+        shockwaveFilter.center = [this.sprite.x, this.sprite.y];
 
         this.gameManager.addAnim(
             gsap.to(shockwaveFilter, {
@@ -176,7 +187,57 @@ export class Bomb {
         gsap.killTweensOf(this.sprite);
         this.sprite.destroy({
             children: true
-        });
+        })
+        return this.boomType
     }
+}
 
+export class Grenade extends Bomb {
+    constructor(gameManager: GameManager, bombSpawner: BombSpawner, id: number) {
+        const sprite = Sprite.from('bomb1');
+        sprite.scale.set(0.4);
+        const boomSound = new Howl({
+            src: [import.meta.env.BASE_URL + 'assets/boom1.mp3'],
+            volume: 1.4,
+        });
+        const graphics = new Graphics()
+        const fill = new FillGradient({
+            type: 'radial',
+            center: { x: 0.5, y: 0.5 },
+            innerRadius: 0,
+            outerCenter: { x: 0.5, y: 0.5 },
+            outerRadius: 0.5,
+            colorStops: [
+                { offset: 0, color: '#ffee00' },
+                { offset: 1, color: '#de7e00' },
+            ],
+        });
+        graphics.star(0, 0, 4, 200, 10, 2*Math.PI*1/4).fill(fill);
+        super(gameManager, bombSpawner, id, 1, 1, sprite, ExplosionType.round, graphics, boomSound)
+    };
+}
+
+export class BlastBomb extends Bomb {
+    constructor(gameManager: GameManager, bombSpawner: BombSpawner, id: number) {
+        const sprite = Sprite.from('bomb2');
+        sprite.scale.set(0.3);
+        const boomSound = new Howl({
+            src: [import.meta.env.BASE_URL + 'assets/boom2.mp3'],
+            volume: 1.2,
+        });
+        const graphics = new Graphics()
+        const fill = new FillGradient({
+            type: 'radial',
+            center: { x: 0.5, y: 0.5 },
+            innerRadius: 0,
+            outerCenter: { x: 0.5, y: 0.5 },
+            outerRadius: 0.5,
+            colorStops: [
+                { offset: 0, color: '#ffee00' },
+                { offset: 1, color: '#de7e00' },
+            ],
+        });
+        graphics.circle(0, 0, 300).fill(fill);
+        super(gameManager, bombSpawner, id, 1, 1, sprite, ExplosionType.round, graphics, boomSound)
+    };
 }
