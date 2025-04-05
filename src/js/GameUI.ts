@@ -1,4 +1,4 @@
-import { Application, Text, TextStyle, FillGradient, Sprite, Texture, Container, Graphics } from 'pixi.js';
+import { Application, Text, TextStyle, FillGradient, Sprite, Texture, Container, Graphics, Rectangle } from 'pixi.js';
 import { DropShadowFilter } from 'pixi-filters';
 import { GameManager } from './GameManager';
 import gsap from 'gsap';
@@ -99,6 +99,7 @@ export class GameUI {
         this.app.stage.addChild(this.uiContainer);
         this.uiContainer.scale.set(1);
         this.uiContainer.visible = false;
+        this.uiContainer.hitArea = new Rectangle(0,0,0,0)
 
         // Create the high score text
         const fill = new FillGradient({

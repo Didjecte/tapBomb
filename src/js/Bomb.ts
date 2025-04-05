@@ -15,6 +15,7 @@ enum ExplosionType {
 export class Bomb {
     id: number;
     hp: number;
+    spawnRate: number;
     score: number;
     sprite: Sprite;
     boomType: ExplosionType;
@@ -24,9 +25,10 @@ export class Bomb {
     gameManager: GameManager;
     app: Application | null;
 
-    constructor(gameManager: GameManager, bombSpawner: BombSpawner, id: number, hp: number, score: number, sprite: Sprite, boomType: ExplosionType, boomGraphics: Graphics, boomSound: Howl) {
+    constructor(gameManager: GameManager, bombSpawner: BombSpawner, id: number, hp: number, spawnRate: number, score: number, sprite: Sprite, boomType: ExplosionType, boomGraphics: Graphics, boomSound: Howl) {
         this.id = id;
         this.hp = hp;
+        this.spawnRate = spawnRate
         this.score = score;
         this.sprite = sprite;
         this.boomType = boomType;
@@ -93,7 +95,6 @@ export class Bomb {
     }
 
     clicked(): void {
-        this.gameManager.addScore(this.score);
         this.destroyBomb();
     }
 
@@ -103,6 +104,7 @@ export class Bomb {
     }
 
     destroyBomb(): ExplosionType {
+        this.gameManager.addScore(this.score);
         const idx = this.bombspawner.bombs.findIndex(bomb => bomb.id === this.id)
         if (idx !== -1) {
             this.bombspawner.bombs.splice(idx, 1);  // Remove the bomb at the found index
@@ -213,7 +215,7 @@ export class Grenade extends Bomb {
             ],
         });
         graphics.star(0, 0, 4, 200, 10, 2*Math.PI*1/4).fill(fill);
-        super(gameManager, bombSpawner, id, 1, 1, sprite, ExplosionType.round, graphics, boomSound)
+        super(gameManager, bombSpawner, id, 1, 0.5, 1, sprite, ExplosionType.none, graphics, boomSound)
     };
 }
 
@@ -237,7 +239,7 @@ export class BlastBomb extends Bomb {
                 { offset: 1, color: '#de7e00' },
             ],
         });
-        graphics.circle(0, 0, 300).fill(fill);
-        super(gameManager, bombSpawner, id, 1, 1, sprite, ExplosionType.round, graphics, boomSound)
+        graphics.circle(0, 0, 350).fill(fill);
+        super(gameManager, bombSpawner, id, 1, 0.25, 1, sprite, ExplosionType.round, graphics, boomSound)
     };
 }

@@ -41,7 +41,7 @@ export class GameManager {
                 setTimeout(() => {
                     this.paused = false;
                     this.gameOver = false;
-                    this.bombSpawner?.startSpawning();
+                    // this.bombSpawner?.startSpawning();
                 }, 800);
             }, 2200);
         }, { once: true });
@@ -53,16 +53,15 @@ export class GameManager {
                     this.musicManager.changePlaybackRate(1.1)
                     this.stage1 = true
                 }
-                
                 //speed up music
                 if (this.elapsedTime > 132 && !this.stage2) {
                     this.musicManager.changePlaybackRate(1.2)
                     this.stage2 = true
                 }
+
                 this.elapsedTime += time.deltaTime / 60;
-                const curveFactor = Math.pow(1 - this.elapsedTime / 300, 3); 
-                const spawnRate = (this.spawnRate - 200) * curveFactor
-                this.bombSpawner?.setSpawnRate(spawnRate)
+                this.bombSpawner?.updateSpawnRates(this.elapsedTime);
+                this.bombSpawner?.spawnBombs();
             }
         });
         

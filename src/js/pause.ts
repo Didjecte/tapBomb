@@ -1,4 +1,4 @@
-import { Application, Container, Graphics, Text, Sprite } from "pixi.js";
+import { Application, Container, Graphics, Text, Sprite, Rectangle } from "pixi.js";
 import gsap from "gsap";
 import { GameManager } from "./GameManager";
 
@@ -138,6 +138,10 @@ export class PauseScreen {
 
         if (this.isPaused) {
             this.pauseOverlay.visible = true; // Show the pause screen
+            // this.restartButton.interactive = true;
+            // this.resumeButton.interactive = true;
+            // this.pauseOverlay.interactive = true;
+            this.pauseOverlay.hitArea = null;
             gsap.fromTo(this.pauseOverlay, {
                     alpha: 0,
                 }, {
@@ -147,6 +151,10 @@ export class PauseScreen {
                 }
             )
         } else {
+            // this.restartButton.interactive = false;
+            // this.resumeButton.interactive = false;
+            // this.pauseOverlay.interactive = false;
+            this.pauseOverlay.hitArea = new Rectangle(0, 0, 0, 0);
             gsap.fromTo(this.pauseOverlay, {
                     duration: 0.3,
                     alpha: 0.9,
