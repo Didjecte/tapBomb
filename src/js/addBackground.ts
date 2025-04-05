@@ -12,17 +12,20 @@ export function addBackground(app : Application)
      * If the preview is landscape, fill the width of the screen
      * and apply horizontal scale to the vertical scale for a uniform fit.
      */
-    if (app.screen.width > app.screen.height) {
-        background.width = app.screen.width * 1.2;
-        background.scale.y = background.scale.x;
-    } else {
-        /**
-         * If the preview is square or portrait, then fill the height of the screen instead
-         * and apply the scaling to the horizontal scale accordingly.
-         */
-        background.height = app.screen.height * 1.2;
-        background.scale.x = background.scale.y;
-    }
+    
+    background.width = app.screen.width;
+    background.scale.y = background.scale.x;
+    // if (app.screen.width > app.screen.height) {
+    //     background.width = app.screen.width;
+    //     background.scale.y = background.scale.x;
+    // } else {
+    //     /**
+    //      * If the preview is square or portrait, then fill the height of the screen instead
+    //      * and apply the scaling to the horizontal scale accordingly.
+    //      */
+    //     background.height = app.screen.height;
+    //     background.scale.x = background.scale.y;
+    // }
 
     // Position the background sprite in the center of the stage.
     background.x = app.screen.width / 2;

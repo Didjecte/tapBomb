@@ -11,9 +11,14 @@ export class GameUI {
 
     constructor(app: Application) {
         this.app = app;
-
         this.currentScore = 0;
         this.lives = 9;
+
+        //ui container
+        this.uiContainer = new Container();
+        this.app.stage.addChild(this.uiContainer);
+        this.uiContainer.scale.set(1)
+
 
         //dropshadow for UI
         const dropShadowFilter = new DropShadowFilter({
@@ -53,15 +58,12 @@ export class GameUI {
         this.livesSprite.anchor.set(0.5)
         this.livesSprite.x = app.screen.width - 90
         this.livesSprite.y = 65
-        this.livesSprite.scale.set(0.2)
+        this.livesSprite.scale.set(0.18)
         this.livesSprite.filters = [dropShadowFilter]
 
 
-        //ui container
-        this.uiContainer = new Container();
         this.uiContainer.addChild(this.scoreText);
         this.uiContainer.addChild(this.livesSprite);
-        this.app.stage.addChild(this.uiContainer);
     }
 
     updateScore(score: number) {
