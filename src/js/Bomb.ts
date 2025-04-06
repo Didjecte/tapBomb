@@ -95,6 +95,7 @@ export class Bomb {
     }
 
     clicked(): void {
+        this.gameManager.addScore(this.score, this.sprite.x, this.sprite.y);
         this.destroyBomb();
     }
 
@@ -104,7 +105,6 @@ export class Bomb {
     }
 
     destroyBomb(): ExplosionType {
-        this.gameManager.addScore(this.score, this.sprite.x, this.sprite.y);
         const idx = this.bombspawner.bombs.findIndex(bomb => bomb.id === this.id)
         if (idx !== -1) {
             this.bombspawner.bombs.splice(idx, 1);  // Remove the bomb at the found index

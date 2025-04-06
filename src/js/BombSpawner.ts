@@ -33,12 +33,6 @@ export class BombSpawner {
         app.stage.addChild(this.bombContainer);
     }
 
-    // startSpawning(): void {
-    //     this.spawnBomb();
-        
-    //     this.updateSpawnRate();
-    // }
-
     spawnBomb(i : number): void {
         let bomb: Bomb;
         if (i === 0) {
@@ -61,7 +55,6 @@ export class BombSpawner {
     spawnBombs(): void {
         for (let i = 0; i < this.spawnRates.length; i++) {
             const spawnChance = Math.min(this.spawnMax[i], this.spawnRates[i] + this.spawnDelta * this.spawnRates[i] * (Math.random() - 0.5))
-            // if (i === 0) console.log(spawnChance)
             
             if (Math.random() < spawnChance) {
                 this.spawnBomb(i);
@@ -103,7 +96,7 @@ export class BombSpawner {
                 for (let i = this.bombs.length - 1; i >= 0; i--) {
                     if (this.bombs[i].sprite.x > x - 110 && this.bombs[i].sprite.x < x + 110) {
                         setTimeout(() => {
-                            this.bombs[i]?.destroyBomb();
+                            this.bombs[i]?.clicked();
                         }, 30)
                     }
                 }

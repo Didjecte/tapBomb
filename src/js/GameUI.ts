@@ -313,28 +313,47 @@ export class GameUI {
     }
 
     multiText(multiCombo: number, x: number, y: number): void {
-        
         let colorStops = [
             { offset: 0, color: '#f5c30f' },
             { offset: 1, color: '#f5760f' }
         ];
-
-        if (multiCombo === 10){
+        if (multiCombo <=5) {
+            const comboSound = new Howl({
+                src: [import.meta.env.BASE_URL + 'assets/combo1.mp3'],
+                volume: 0.6,
+            });
+            comboSound.play()
+        } else if (multiCombo === 10){
             colorStops = [
                 { offset: 0, color: '#f57e0f' },
                 { offset: 1, color: '#e00000' }
             ];    
+            const comboSound = new Howl({
+                src: [import.meta.env.BASE_URL + 'assets/combo2.mp3'],
+                volume: 0.6,
+            });
+            comboSound.play()
         } else if (multiCombo === 15) {
             colorStops = [
                 { offset: 0, color: '#ff30e7' },
                 { offset: 1, color: '#e60031' }
             ];
+            const comboSound = new Howl({
+                src: [import.meta.env.BASE_URL + 'assets/combo3.mp3'],
+                volume: 0.6,
+            });
+            comboSound.play()
         } else if (multiCombo >= 20) {
             colorStops = [
                 { offset: 0, color: '#3826ff' },
                 { offset: 1, color: '#a826ff' }
             ];
-        }
+            const comboSound = new Howl({
+                src: [import.meta.env.BASE_URL + 'assets/combo4.mp3'],
+                volume: 0.6,
+            });
+            comboSound.play()
+        } 
         
         const startFill = new FillGradient({
             type: 'linear',
@@ -392,7 +411,7 @@ export class GameUI {
     
     shakeHeart(): void {
         gsap.to(this.livesSprite, {
-            x: this.livesSprite.x + 5,
+            x: this.livesSprite.x + 10,
             duration: 0.05,
             repeat: 5,
             yoyo: true,
@@ -400,7 +419,7 @@ export class GameUI {
             onComplete: () => {
                 this.livesSprite.x = Math.round(this.livesSprite.x); // clean-up float errors
             }
-        })
+        });
     }
 
     hideUI(): void {
@@ -412,7 +431,6 @@ export class GameUI {
     }
 
     start(): void {
-        
         setTimeout(() => {
             this.hintText
             gsap.to(this.hintText, {
@@ -422,7 +440,7 @@ export class GameUI {
                     this.hintText.visible = false
                 }
             })    
-        }, 30000);
+        }, 66000);
         setTimeout(() => {
             gsap.to(this.startText, {
                 duration: 1,

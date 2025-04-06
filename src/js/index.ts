@@ -30,7 +30,9 @@ const height = 720;
 
     const pauseScreen = new PauseScreen(app, gameManager);
     
-    const stats = new Stats(app);
+
+    //check fps draw call
+    // const stats = new Stats(app);
 
     setupCustomCursor(app);
 })();
@@ -53,7 +55,7 @@ async function setup()
     // Then adding the application's canvas to the DOM body.
     document.body.appendChild(app.canvas);
 
-    app.renderer.resize
+    // app.renderer.resize
 
     // const scaleX = app.screen.width / width;
     // app.stage.scale.set(scaleX, scaleX)
@@ -68,7 +70,7 @@ async function setup()
     
     // window.addEventListener('resize', enforceMinimumSize);
     // enforceMinimumSize(); // Initial check
-    window.addEventListener("resize", resize);
+    // window.addEventListener("resize", resize);
 
     //replace cursor
     app.renderer.events.cursorStyles.default = 'none';

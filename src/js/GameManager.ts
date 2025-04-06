@@ -102,14 +102,13 @@ export class GameManager {
         this.comboTime = this.elapsedTime;
         
         const comboTier = Math.trunc(this.comboMulti / 5)
-        // console.log(comboTier)
 
-        if (comboTier > this.comboTierTable.length) {
+        if (comboTier >= this.comboTierTable.length) {
             this.score += score * this.comboTierTable[this.comboTierTable.length - 1]
+            console.log(score * this.comboTierTable[this.comboTierTable.length - 1])
         } else {
             this.score += score * this.comboTierTable[comboTier];
         }
-        // console.log(score * this.comboTierTable[comboTier])
         this.gameUI?.updateScore(this.score);
         
         if (this.comboMulti % 5 === 0) {
@@ -172,21 +171,27 @@ export class GameManager {
 
     restartGame() {
         // gsap.globalTimeline.clear(); //buggy for restart UI
-        this.tl.clear();
-        this.tl.pause();
-        this.tl.play();
-        this.paused = false;
-        this.gameOver = false;
-        this.musicManager.startBGM();
-        this.musicManager.changePlaybackRate(1);
-
         this.bombSpawner?.bombContainer.removeChildren();
         this.bombSpawner!.bombs = [];
         this.bombSpawner!.idCounter = 1;
-
         this.updateScore(0);
+        this.updateLives(9);
         this.elapsedTime = 0;
         this.comboTime = 0;
-        this.updateLives(9);
+        this.musicManager.changePlaybackRate(1);
+        this.musicManager.stopBGM();
+        this.paused = true;
+        this.gameOver = true;
+        this.stage1 = false;
+        this.stage2 = false;
+
+        this.tl.clear();
+        this.tl.pause();
+        setTimeout(() => {
+            this.musicManager.startBGM();
+            this.tl.play();
+            this.paused = false;
+            this.gameOver = false;
+        }, 500)
     }
 }

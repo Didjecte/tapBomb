@@ -2,7 +2,7 @@ import { Howl } from 'howler';
 
 export class MusicManager {
     static instance: MusicManager;
-    volume = 0.5;
+    volume = 0.4;
     soundId: number | null = null;
     paused = false;
     isFading = false;
