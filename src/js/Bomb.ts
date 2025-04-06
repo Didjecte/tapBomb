@@ -243,3 +243,28 @@ export class BlastBomb extends Bomb {
         super(gameManager, bombSpawner, id, 1, 0.25, 1, sprite, ExplosionType.round, graphics, boomSound)
     };
 }
+
+export class ColBomb extends Bomb {
+    constructor(gameManager: GameManager, bombSpawner: BombSpawner, id: number) {
+        const sprite = Sprite.from('bomb3');
+        sprite.scale.set(0.3);
+        const boomSound = new Howl({
+            src: [import.meta.env.BASE_URL + 'assets/boom3.mp3'],
+            volume: 0.25,
+        });
+        const graphics = new Graphics()
+        const fill = new FillGradient({
+            type: 'radial',
+            center: { x: 0.5, y: 0.5 },
+            innerRadius: 0,
+            outerCenter: { x: 0.5, y: 0.5 },
+            outerRadius: 0.5,
+            colorStops: [
+                { offset: 0, color: '#ffee00' },
+                { offset: 1, color: '#de7e00' },
+            ],
+        });
+        graphics.ellipse(0, 0, 60, 2000).fill(fill);
+        super(gameManager, bombSpawner, id, 1, 0.25, 1, sprite, ExplosionType.collumn, graphics, boomSound)
+    };
+}

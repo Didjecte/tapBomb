@@ -1,5 +1,5 @@
 import { Application, Container } from 'pixi.js';
-import { BlastBomb, Bomb, Grenade } from './Bomb';
+import { BlastBomb, Bomb, ColBomb, Grenade } from './Bomb';
 import { GameManager } from './GameManager';
 // import { GameManager } from './GameManager';
 
@@ -27,8 +27,8 @@ export class BombSpawner {
         this.gameManager = gameManager;
         this.bombs = [];
         this.spawnDelta = 2; //randomness
-        this.spawnMax = [0.02, 0.002];
-        this.iniSpawnRates = [0.007, 0.001]; //grenade, blastbomb, TnT, gold
+        this.spawnMax = [0.02, 0.0012, 0.0012];
+        this.iniSpawnRates = [0.007, 0.0007, 0.0007]; //grenade, blastbomb, TnT, gold
         this.spawnRates = [...this.iniSpawnRates];
         app.stage.addChild(this.bombContainer);
     }
@@ -42,9 +42,11 @@ export class BombSpawner {
     spawnBomb(i : number): void {
         let bomb: Bomb;
         if (i === 0) {
-            bomb = new Grenade(this.gameManager, this, this.idCounter++);
+            bomb = new Grenade(this.gameManager, this, this.idCounter++); //grenade
         } else if (i === 1) {
             bomb = new BlastBomb(this.gameManager, this, this.idCounter++);
+        }  else if (i === 2) {
+            bomb = new ColBomb(this.gameManager, this, this.idCounter++);
         } else {
             //backup
             bomb = new Grenade(this.gameManager, this, this.idCounter++);
@@ -67,10 +69,12 @@ export class BombSpawner {
 
     updateSpawnRates(elapsedTime: number) {
         const curveFactor = Math.pow(1 - elapsedTime / 300, 2); 
+        //grenade
         this.spawnRates[0] = this.iniSpawnRates[0] + (1 - curveFactor) * 0.013
-        console.log(this.spawnRates[0])
-
-        this.spawnRates[1] = this.iniSpawnRates[1] + (1 - curveFactor) * 0.001
+        //blastbomb
+        this.spawnRates[1] = this.iniSpawnRates[1] + (1 - curveFactor) * 0.0005
+        //colBomb
+        this.spawnRates[2] = this.iniSpawnRates[2] + (1 - curveFactor) * 0.0005
     }
 
     checkExplosion(explosionType : ExplosionType, x: number, y: number): void {
@@ -94,6 +98,13 @@ export class BombSpawner {
                 break;
     
             case ExplosionType.collumn:
+                for (let i = this.bombs.length - 1; i >= 0; i--) {
+                    if (this.bombs[i].sprite.x > x - 110 && this.bombs[i].sprite.x < x + 110) {
+                        setTimeout(() => {
+                            this.bombs[i]?.destroyBomb();
+                        }, 30)
+                    }
+                }
                 break;
     
             default:

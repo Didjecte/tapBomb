@@ -19,6 +19,7 @@ export class GameUI {
     highScoreText: Text;
     titleText: Text;
     startText: Text;
+    hintText: Text;
 
     constructor(app: Application, gameManager: GameManager) {
         this.app = app;
@@ -93,7 +94,6 @@ export class GameUI {
             ease: 'power1.in'
         })
         
-
         //ui container
         this.uiContainer = new Container();
         this.app.stage.addChild(this.uiContainer);
@@ -136,6 +136,21 @@ export class GameUI {
         this.livesSprite.filters = [dropShadowFilter];
 
         this.uiContainer.addChild(this.livesSprite);
+
+        //'Esc to Pause'
+        this.hintText = new Text({text: 'ESC to Pause', style: {
+            fontFamily: 'FastHand',
+            fontSize: 20,
+            fill: fill,
+            stroke: { color: '#753b00', width: 3, join: 'round' },
+            letterSpacing: 6,
+            align: 'left',
+        }})
+        this.hintText.filters = [dropShadowFilter];
+        this.hintText.anchor.set(0.5)
+        this.hintText.x = this.app.screen.width - 150;
+        this.hintText.y = this.app.screen.height - 40;
+        this.uiContainer.addChild(this.hintText);
 
         const goFill = new FillGradient({
             type: 'linear',
@@ -327,6 +342,17 @@ export class GameUI {
     }
 
     start(): void {
+        
+        setTimeout(() => {
+            this.hintText
+            gsap.to(this.hintText, {
+                duration: 2,
+                alpha: 0,
+                onComplete: () => {
+                    this.hintText.visible = false
+                }
+            })    
+        }, 30000);
         setTimeout(() => {
             gsap.to(this.startText, {
                 duration: 1,

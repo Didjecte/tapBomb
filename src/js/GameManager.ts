@@ -157,6 +157,7 @@ export class GameManager {
 
         this.bombSpawner?.bombContainer.removeChildren();
         this.bombSpawner!.bombs = [];
+        this.bombSpawner!.idCounter = 1;
 
         this.updateScore(0);
         this.elapsedTime = 0;
