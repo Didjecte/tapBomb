@@ -189,6 +189,7 @@ export class GameManager {
         this.tl.pause();
         setTimeout(() => {
             this.musicManager.startBGM();
+            this.musicManager.changePlaybackRate(1);
             this.tl.play();
             this.paused = false;
             this.gameOver = false;
