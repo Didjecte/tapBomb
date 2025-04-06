@@ -312,6 +312,76 @@ export class GameUI {
         this.currentScore = score;
     }
 
+    multiText(multiCombo: number, x: number, y: number): void {
+        
+        let colorStops = [
+            { offset: 0, color: '#f5c30f' },
+            { offset: 1, color: '#f5760f' }
+        ];
+
+        if (multiCombo === 10){
+            colorStops = [
+                { offset: 0, color: '#f57e0f' },
+                { offset: 1, color: '#e00000' }
+            ];    
+        } else if (multiCombo === 15) {
+            colorStops = [
+                { offset: 0, color: '#ff30e7' },
+                { offset: 1, color: '#e60031' }
+            ];
+        } else if (multiCombo >= 20) {
+            colorStops = [
+                { offset: 0, color: '#3826ff' },
+                { offset: 1, color: '#a826ff' }
+            ];
+        }
+        
+        const startFill = new FillGradient({
+            type: 'linear',
+            start: { x: 0, y: 0 },
+            end: { x: 0, y: 1 },
+            colorStops: colorStops
+        });
+
+        const multiText = new Text({text: multiCombo + '  Hits!', style: {
+            fontFamily: 'FastHand',
+            fontSize: 60,
+            fill: startFill,
+            stroke: { color: '#753b00', width: 3, join: 'round' },
+            letterSpacing: 3,
+            align: 'left',
+        }})
+
+        multiText.position = {x: x, y: y};
+        multiText.anchor.set(0.5);
+        this.uiContainer.addChild(multiText);
+        
+        gsap.fromTo(multiText.scale, {
+            x: 0,
+            y: 0,
+        }, {
+            duration: 0.1,
+            x: 1,
+            y: 1
+        })
+        setTimeout(() => {
+            gsap.to(multiText, {
+                duration: 0.2,
+                alpha: 0
+            })
+            gsap.to(multiText.scale, {
+                duration: 0.2,
+                x: 0,
+                y: 0,
+                onComplete: () => {
+                    gsap.killTweensOf(multiText);
+                    this.uiContainer.parent.removeChild(multiText);
+                    multiText.destroy();
+                }
+            })
+        }, 2000)
+    }
+
     updateLives(lives: number): void {
         this.lives = lives;
         this.livesSprite.texture = Texture.from('heart' + lives);

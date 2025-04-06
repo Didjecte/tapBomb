@@ -19,13 +19,13 @@ export class Bomb {
     score: number;
     sprite: Sprite;
     boomType: ExplosionType;
-    boomGraphics: Graphics;
+    boomGraphics: Graphics | Sprite;
     boomSound: Howl;
     bombspawner: BombSpawner;
     gameManager: GameManager;
     app: Application | null;
 
-    constructor(gameManager: GameManager, bombSpawner: BombSpawner, id: number, hp: number, spawnRate: number, score: number, sprite: Sprite, boomType: ExplosionType, boomGraphics: Graphics, boomSound: Howl) {
+    constructor(gameManager: GameManager, bombSpawner: BombSpawner, id: number, hp: number, spawnRate: number, score: number, sprite: Sprite, boomType: ExplosionType, boomGraphics: Graphics | Sprite, boomSound: Howl) {
         this.id = id;
         this.hp = hp;
         this.spawnRate = spawnRate
@@ -104,7 +104,7 @@ export class Bomb {
     }
 
     destroyBomb(): ExplosionType {
-        this.gameManager.addScore(this.score);
+        this.gameManager.addScore(this.score, this.sprite.x, this.sprite.y);
         const idx = this.bombspawner.bombs.findIndex(bomb => bomb.id === this.id)
         if (idx !== -1) {
             this.bombspawner.bombs.splice(idx, 1);  // Remove the bomb at the found index
@@ -117,31 +117,18 @@ export class Bomb {
         setTimeout(() => {
             this.bombspawner.checkExplosion(boomType, x, y);
         }, 10)
-        // //explosion
-        // const graphics = new Graphics()
-        // const fill = new FillGradient({
-        //     type: 'radial',
-        //     center: { x: 0.5, y: 0.5 },
-        //     innerRadius: 0,
-        //     outerCenter: { x: 0.5, y: 0.5 },
-        //     outerRadius: 0.5,
-        //     colorStops: [
-        //         { offset: 0, color: '#ffee00' },
-        //         { offset: 1, color: '#de7e00' },
-        //     ],
-        // });
-        
-        // graphics.star(0, 0, 4, 200, 10, 2*Math.PI*1/4).fill(fill);
+
         this.sprite.parent.addChild(this.boomGraphics);
         this.boomGraphics.position.set(this.sprite.x, this.sprite.y);
+        const scaleIni = this.boomGraphics.scale.x
         this.boomGraphics.scale.set(0)
         this.boomGraphics.hitArea = new Rectangle(0, 0, 0, 0);
         
         this.gameManager.addAnim(
             gsap.to(this.boomGraphics.scale, {
                 duration: 0.2,
-                x:0.8,
-                y:0.8,
+                x: scaleIni,
+                y: scaleIni,
                 ease: 'back.out(1.5)',
             })
         )
@@ -215,6 +202,7 @@ export class Grenade extends Bomb {
             ],
         });
         graphics.star(0, 0, 4, 200, 10, 2*Math.PI*1/4).fill(fill);
+        graphics.scale.set(0.8);
         super(gameManager, bombSpawner, id, 1, 0.5, 1, sprite, ExplosionType.none, graphics, boomSound)
     };
 }
@@ -240,6 +228,7 @@ export class BlastBomb extends Bomb {
             ],
         });
         graphics.circle(0, 0, 350).fill(fill);
+        graphics.scale.set(0.8);
         super(gameManager, bombSpawner, id, 1, 0.25, 1, sprite, ExplosionType.round, graphics, boomSound)
     };
 }
@@ -266,5 +255,20 @@ export class ColBomb extends Bomb {
         });
         graphics.ellipse(0, 0, 60, 2000).fill(fill);
         super(gameManager, bombSpawner, id, 1, 0.25, 1, sprite, ExplosionType.collumn, graphics, boomSound)
+    };
+}
+
+export class GoldBomb extends Bomb {
+    constructor(gameManager: GameManager, bombSpawner: BombSpawner, id: number) {
+        const sprite = Sprite.from('bomb4');
+        sprite.scale.set(0.25);
+        const boomSound = new Howl({
+            src: [import.meta.env.BASE_URL + 'assets/boom4.mp3'],
+            volume: 0.25,
+        });
+        const graphics = Sprite.from('coin')
+        graphics.anchor.set(0.5)
+        graphics.scale.set(0.2)
+        super(gameManager, bombSpawner, id, 1, 0.25, 10, sprite, ExplosionType.none, graphics, boomSound)
     };
 }

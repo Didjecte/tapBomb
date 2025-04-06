@@ -1,5 +1,5 @@
 import { Application, Container } from 'pixi.js';
-import { BlastBomb, Bomb, ColBomb, Grenade } from './Bomb';
+import { BlastBomb, Bomb, ColBomb, GoldBomb, Grenade } from './Bomb';
 import { GameManager } from './GameManager';
 // import { GameManager } from './GameManager';
 
@@ -27,8 +27,8 @@ export class BombSpawner {
         this.gameManager = gameManager;
         this.bombs = [];
         this.spawnDelta = 2; //randomness
-        this.spawnMax = [0.02, 0.0012, 0.0012];
-        this.iniSpawnRates = [0.007, 0.0007, 0.0007]; //grenade, blastbomb, TnT, gold
+        this.spawnMax = [0.02, 0.0012, 0.0012, 0.0005];
+        this.iniSpawnRates = [0.007, 0.0007, 0.0007, 0.0005]; //grenade, blastbomb, TnT, gold
         this.spawnRates = [...this.iniSpawnRates];
         app.stage.addChild(this.bombContainer);
     }
@@ -47,6 +47,8 @@ export class BombSpawner {
             bomb = new BlastBomb(this.gameManager, this, this.idCounter++);
         }  else if (i === 2) {
             bomb = new ColBomb(this.gameManager, this, this.idCounter++);
+        }  else if (i === 3) {
+            bomb = new GoldBomb(this.gameManager, this, this.idCounter++);
         } else {
             //backup
             bomb = new Grenade(this.gameManager, this, this.idCounter++);

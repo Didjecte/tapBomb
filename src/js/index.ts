@@ -104,6 +104,7 @@ async function preload()
         { alias: 'bomb2', src: import.meta.env.BASE_URL + '/assets/bomb2.png' },
         { alias: 'bomb3', src: import.meta.env.BASE_URL + '/assets/bomb3.png' },
         { alias: 'bomb4', src: import.meta.env.BASE_URL + '/assets/bomb4.png' },
+        { alias: 'coin', src: import.meta.env.BASE_URL + '/assets/coin.png' },
         { alias: 'heart0', src: import.meta.env.BASE_URL + '/assets/heart0.png' },
         { alias: 'heart1', src: import.meta.env.BASE_URL + '/assets/heart1.png' },
         { alias: 'heart2', src: import.meta.env.BASE_URL + '/assets/heart2.png' },

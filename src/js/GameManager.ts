@@ -21,6 +21,11 @@ export class GameManager {
     gameOver = true;
     stage1 = false;
     stage2 = false;
+    comboWindow = 0.5; //0.5s
+    comboTime = 0; //when is last combo chain
+    comboMulti = 1;
+    comboTierTable = [1,2,3,4,5] // how much each combo chains gives u
+
 
     constructor(app: Application, musicManager: MusicManager, ui?: GameUI, bombSpawner?: BombSpawner) {
         this.app = app;
@@ -63,9 +68,10 @@ export class GameManager {
                 this.bombSpawner?.updateSpawnRates(this.elapsedTime);
                 this.bombSpawner?.spawnBombs();
             }
-        });
-        
+        });    
     }
+
+
 
     setBombSpawner(bombSpawner: BombSpawner) {
         this.bombSpawner = bombSpawner;
@@ -87,9 +93,28 @@ export class GameManager {
         return score;
     }
     
-    addScore(score: number) : void {
-        this.score += score;
-        if (this.gameUI) this.gameUI.updateScore(this.score);
+    addScore(score: number,x: number, y: number) {
+        if (this.elapsedTime - this.comboTime > this.comboWindow) {
+            this.comboMulti = 1;
+        } else {
+            this.comboMulti++;
+        }
+        this.comboTime = this.elapsedTime;
+        
+        const comboTier = Math.trunc(this.comboMulti / 5)
+        // console.log(comboTier)
+
+        if (comboTier > this.comboTierTable.length) {
+            this.score += score * this.comboTierTable[this.comboTierTable.length - 1]
+        } else {
+            this.score += score * this.comboTierTable[comboTier];
+        }
+        // console.log(score * this.comboTierTable[comboTier])
+        this.gameUI?.updateScore(this.score);
+        
+        if (this.comboMulti % 5 === 0) {
+            this.gameUI?.multiText(this.comboMulti, x, y)
+        }
     }
 
     updateScore(score: number) : void {
@@ -161,6 +186,7 @@ export class GameManager {
 
         this.updateScore(0);
         this.elapsedTime = 0;
+        this.comboTime = 0;
         this.updateLives(9);
     }
 }
