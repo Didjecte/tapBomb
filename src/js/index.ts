@@ -30,7 +30,6 @@ const height = 720;
 
     const pauseScreen = new PauseScreen(app, gameManager);
     
-
     //check fps draw call
     // const stats = new Stats(app);
 

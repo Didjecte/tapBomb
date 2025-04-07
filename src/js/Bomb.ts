@@ -210,6 +210,7 @@ export class Grenade extends Bomb {
 export class BlastBomb extends Bomb {
     constructor(gameManager: GameManager, bombSpawner: BombSpawner, id: number) {
         const sprite = Sprite.from('bomb2');
+        sprite.zIndex = 10;
         sprite.scale.set(0.3);
         const boomSound = new Howl({
             src: [import.meta.env.BASE_URL + 'assets/boom2.mp3'],
@@ -236,6 +237,7 @@ export class BlastBomb extends Bomb {
 export class ColBomb extends Bomb {
     constructor(gameManager: GameManager, bombSpawner: BombSpawner, id: number) {
         const sprite = Sprite.from('bomb3');
+        sprite.zIndex = 10;
         sprite.scale.set(0.3);
         const boomSound = new Howl({
             src: [import.meta.env.BASE_URL + 'assets/boom3.mp3'],
@@ -261,6 +263,7 @@ export class ColBomb extends Bomb {
 export class GoldBomb extends Bomb {
     constructor(gameManager: GameManager, bombSpawner: BombSpawner, id: number) {
         const sprite = Sprite.from('bomb4');
+        sprite.zIndex = 10;
         sprite.scale.set(0.25);
         const boomSound = new Howl({
             src: [import.meta.env.BASE_URL + 'assets/boom4.mp3'],

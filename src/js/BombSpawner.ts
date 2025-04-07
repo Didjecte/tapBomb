@@ -27,7 +27,7 @@ export class BombSpawner {
         this.gameManager = gameManager;
         this.bombs = [];
         this.spawnDelta = 0.5; //randomness
-        this.spawnMax = [0.02, 0.0012, 0.0012, 0.0005];
+        this.spawnMax = [0.017, 0.0012, 0.0012, 0.0005];
         this.iniSpawnRates = [0.007, 0.0007, 0.0007, 0.0005]; //grenade, blastbomb, TnT, gold
         this.spawnRates = [...this.iniSpawnRates];
         app.stage.addChild(this.bombContainer);
@@ -50,13 +50,17 @@ export class BombSpawner {
         this.bombs.push(bomb)
         bomb.spawn(this.app);
         this.bombContainer.addChild(bomb.sprite);
+        this.bombContainer.sortChildren();
     }
     
     spawnBombs(): void {
         for (let i = 0; i < this.spawnRates.length; i++) {
-            const spawnChance = Math.min(this.spawnMax[i], this.spawnRates[i] + this.spawnDelta * (this.spawnMax[i] - this.spawnRates[i]) * (Math.random() - 0.5))
-            if (i === 0) console.log(spawnChance)
-            
+            let spawnChance = Math.min(this.spawnMax[i], this.spawnRates[i] + this.spawnDelta * (this.spawnMax[i] - this.spawnRates[i]) * (Math.random() - 0.5))
+            //tests max dif
+            // if(i === 0) spawnChance = 0.017
+            // if(i === 1) spawnChance = 0.0012
+            // if(i === 2) spawnChance = 0.0012
+
             if (Math.random() < spawnChance) {
                 this.spawnBomb(i);
             }

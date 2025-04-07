@@ -48,7 +48,6 @@ export class GameManager {
                 setTimeout(() => {
                     this.paused = false;
                     this.gameOver = false;
-                    // this.bombSpawner?.startSpawning();
                 }, 800);
             }, 2200);
         }, { once: true });
