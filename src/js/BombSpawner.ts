@@ -26,7 +26,7 @@ export class BombSpawner {
         this.bombContainer = new Container();
         this.gameManager = gameManager;
         this.bombs = [];
-        this.spawnDelta = 2; //randomness
+        this.spawnDelta = 0.5; //randomness
         this.spawnMax = [0.02, 0.0012, 0.0012, 0.0005];
         this.iniSpawnRates = [0.007, 0.0007, 0.0007, 0.0005]; //grenade, blastbomb, TnT, gold
         this.spawnRates = [...this.iniSpawnRates];
@@ -54,7 +54,8 @@ export class BombSpawner {
     
     spawnBombs(): void {
         for (let i = 0; i < this.spawnRates.length; i++) {
-            const spawnChance = Math.min(this.spawnMax[i], this.spawnRates[i] + this.spawnDelta * this.spawnRates[i] * (Math.random() - 0.5))
+            const spawnChance = Math.min(this.spawnMax[i], this.spawnRates[i] + this.spawnDelta * (this.spawnMax[i] - this.spawnRates[i]) * (Math.random() - 0.5))
+            if (i === 0) console.log(spawnChance)
             
             if (Math.random() < spawnChance) {
                 this.spawnBomb(i);
@@ -63,9 +64,10 @@ export class BombSpawner {
     }
 
     updateSpawnRates(elapsedTime: number) {
-        const curveFactor = Math.pow(1 - elapsedTime / 300, 2); 
+        const curveFactor = Math.pow(1 - elapsedTime / 264, 2); 
         //grenade
         this.spawnRates[0] = this.iniSpawnRates[0] + (1 - curveFactor) * 0.013
+        // console.log(this.spawnRates[0])
         //blastbomb
         this.spawnRates[1] = this.iniSpawnRates[1] + (1 - curveFactor) * 0.0005
         //colBomb

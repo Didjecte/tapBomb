@@ -25,6 +25,8 @@ export class GameManager {
     comboTime = 0; //when is last combo chain
     comboMulti = 1;
     comboTierTable = [1,2,3,4,5] // how much each combo chains gives u
+    bombSpawnTimer = 0;
+    bombSpawnInterval = 0.005;
 
 
     constructor(app: Application, musicManager: MusicManager, ui?: GameUI, bombSpawner?: BombSpawner) {
@@ -65,8 +67,12 @@ export class GameManager {
                 }
 
                 this.elapsedTime += time.deltaTime / 60;
-                this.bombSpawner?.updateSpawnRates(this.elapsedTime);
-                this.bombSpawner?.spawnBombs();
+                this.bombSpawnTimer += time.deltaTime / 60;
+                while (this.bombSpawnTimer >= this.bombSpawnInterval) {
+                    this.bombSpawner?.updateSpawnRates(this.elapsedTime);
+                    this.bombSpawner?.spawnBombs();
+                    this.bombSpawnTimer -= this.bombSpawnInterval;
+                }
             }
         });    
     }
@@ -105,7 +111,6 @@ export class GameManager {
 
         if (comboTier >= this.comboTierTable.length) {
             this.score += score * this.comboTierTable[this.comboTierTable.length - 1]
-            console.log(score * this.comboTierTable[this.comboTierTable.length - 1])
         } else {
             this.score += score * this.comboTierTable[comboTier];
         }
